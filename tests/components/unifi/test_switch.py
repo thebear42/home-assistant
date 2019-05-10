@@ -260,8 +260,8 @@ async def test_switches(hass, mock_controller):
     mock_controller.mock_device_responses.append([DEVICE_1])
     await setup_controller(hass, mock_controller)
     assert len(mock_controller.mock_requests) == 2
-    # 1 All Lights group, 2 lights
-    assert len(hass.states.async_all()) == 2
+    # 1 light
+    assert len(hass.states.async_all()) == 1
 
     switch_1 = hass.states.get('switch.client_1')
     assert switch_1 is not None
@@ -284,7 +284,7 @@ async def test_new_client_discovered(hass, mock_controller):
 
     await setup_controller(hass, mock_controller)
     assert len(mock_controller.mock_requests) == 2
-    assert len(hass.states.async_all()) == 2
+    assert len(hass.states.async_all()) == 1
 
     mock_controller.mock_client_responses.append([CLIENT_1, CLIENT_2])
     mock_controller.mock_device_responses.append([DEVICE_1])
@@ -295,7 +295,7 @@ async def test_new_client_discovered(hass, mock_controller):
     }, blocking=True)
     # 2x light update, 1 turn on request
     assert len(mock_controller.mock_requests) == 5
-    assert len(hass.states.async_all()) == 3
+    assert len(hass.states.async_all()) == 2
 
     switch = hass.states.get('switch.client_2')
     assert switch is not None
@@ -345,7 +345,7 @@ async def test_failed_update_unreachable_controller(hass, mock_controller):
     }, blocking=True)
     # 2x light update, 1 turn on request
     assert len(mock_controller.mock_requests) == 3
-    assert len(hass.states.async_all()) == 3
+    assert len(hass.states.async_all()) == 2
 
     assert mock_controller.available is False
 
